@@ -16,7 +16,7 @@ export default class ArticleDownloader implements IArticleDownloader {
    * @returns 
    */
   async downloadRandomArticle(url?: string): Promise<any> {
-    if (!url?.includes('wikipedia.org/wiki/')) {
+    if (url !== undefined && !url?.includes('wikipedia.org/wiki/')) {
       throw new Error(INVALID_URL_PROVIDED_ERROR);
     }
     const queryUrl: string = url ?? this.defaultQueryUrl;

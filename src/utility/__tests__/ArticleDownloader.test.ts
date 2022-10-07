@@ -26,5 +26,10 @@ describe('ArticleDownloader', () => {
       const actualHTML = await downloader.downloadRandomArticle(validUrl);
       expect(actualHTML).toEqual(expectedHTML);
     });
+
+    it('should successfully download a random article', async () => {
+      const actualHTML = await downloader.downloadRandomArticle();
+      expect(actualHTML.length).toBeGreaterThan(100);
+    });
   });
 });
