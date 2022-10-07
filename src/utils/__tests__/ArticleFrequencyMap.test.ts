@@ -6,11 +6,11 @@ describe('ArticleFrequencyMap', () => {
     it('should create a map given an article without a window', () => {
       const testHTMLStr: string = `
         <html>
-          <body>
+          <div id="content">
             <h1>The title title title, three times!</h1>
             <h2>Another title.</h2>
             <p>This is the paragraph paragraph paragraph. It might have a title, too.</p>
-          </body>
+          </div>
         </html>
       `;
       const testArticle: HTMLElement = parse(testHTMLStr);
@@ -31,11 +31,11 @@ describe('ArticleFrequencyMap', () => {
     it('should create a map given an article with a window', () => {
       const testHTMLStr: string = `
         <html>
-          <body>
+          <div id="content">
             <h1>The title title title, three times!</h1>
             <h2>Another title.</h2>
             <p>This is the paragraph paragraph paragraph. It might have a title, too.</p>
-          </body>
+          </div>
         </html>
       `;
       const testArticle: HTMLElement = parse(testHTMLStr);

@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
+import { Datastore } from '@google-cloud/datastore';
 import { Bucket, Storage } from '@google-cloud/storage';
 
 dotenv.config({ path: path.join(__dirname, '../../.env') });
@@ -85,4 +86,34 @@ export async function doesFileExist(
   fileName: string,
 ): Promise<boolean> {
   return (await storage.bucket(bucket).file(fileName).exists())[0];
+}
+
+/**
+ * Stores an object in Datastore.
+ */
+export async function storeObjects(
+  datastore: Datastore,
+  kind: string,
+  getIDFromObject: (obj: any) => string,
+  objects: any[],
+): Promise<boolean> {
+  try {
+    const tasks = objects.map((object: any) => {
+      const id: string = getIDFromObject(object);
+      const key = datastore.key([kind, id]);
+      return { key, data: object };
+    });
+    // Datastore upsert calls need to be in batches of 400.
+    const batchedTasks: any[][] = []
+    while (tasks.length > 0) {
+      const currentTasks = tasks.splice(0, 400);
+      batchedTasks.push(currentTasks);
+    }
+    await Promise.all(batchedTasks.map(async (tasks: any[]) => {
+      await datastore.upsert(tasks);
+    }));
+    return true;
+  } catch {
+    return false;
+  }
 }

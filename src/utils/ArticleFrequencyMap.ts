@@ -25,13 +25,13 @@ export default class ArticleFrequencyMap implements IArticleFrequencyMap {
    */
   private createHeadingBodyFrequencyMap(article: HTMLElement, window: number = 1): HeadingBodyFrequencyMap {
     const headings: string = article
-      .querySelectorAll('h1, h2, h3, h4, h5, h6')
+      .querySelectorAll('div#content h1, h2, h3, h4, h5, h6')
       .map((element: HTMLElement) => element.text)
       .join(' ');
     const headingsMap: WordFrequencyMap = new WordFrequencyMap(headings, window);
     
     const body: string = article
-      .querySelectorAll('p')
+      .querySelectorAll('div#content p')
       .map((element: HTMLElement) => element.text)
       .join(' ');
     const bodyMap: WordFrequencyMap = new WordFrequencyMap(body, window);

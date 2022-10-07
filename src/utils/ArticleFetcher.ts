@@ -5,7 +5,7 @@ export interface IArticleFetcher {
 }
 
 /**
- * An interface for downloading the raw HTML of random Wikipedia articles.
+ * An interface for fetching the raw HTML of random Wikipedia articles.
  */
 export default class ArticleFetcher implements IArticleFetcher {
   // This resolves to a random Wikipedia article.
