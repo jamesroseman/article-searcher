@@ -1,19 +1,19 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { HTMLElement, parse } from 'node-html-parser';
-import ArticleDownloader, { INVALID_URL_PROVIDED_ERROR } from "../ArticleDownloader";
+import ArticleFetcher, { INVALID_URL_PROVIDED_ERROR } from "../ArticleFetcher";
 
 describe('ArticleDownloader', () => {
-  let downloader: ArticleDownloader;
+  let downloader: ArticleFetcher;
 
   beforeEach(() => {
-    downloader = new ArticleDownloader();
+    downloader = new ArticleFetcher();
   });
 
   describe('downloadRandomArticle', () => {
     it('should throw if non-Wikipedia URL is provided', async () => {
       const invalidUrl: string = 'www.google.com/whatever';
-      await expect(downloader.downloadRandomArticle(invalidUrl))
+      await expect(downloader.fetchRandomArticle(invalidUrl))
         .rejects
         .toThrow(INVALID_URL_PROVIDED_ERROR)
     });
@@ -24,12 +24,16 @@ describe('ArticleDownloader', () => {
       const expectedHTMLBuffer: Buffer = fs.readFileSync(expectedHTMLPath);
       const expectedHTMLStr: string = expectedHTMLBuffer.toString();
       const expectedHTML: HTMLElement = parse(expectedHTMLStr);
-      const actualHTML = await downloader.downloadRandomArticle(validUrl);
+      const actualResponse: Response = await downloader.fetchRandomArticle(validUrl);
+      const actualHTMLStr: string = await actualResponse.text();
+      const actualHTML: HTMLElement = parse(actualHTMLStr);
       expect(actualHTML.text).toEqual(expectedHTML.text);
     });
 
     it('should successfully download a random article', async () => {
-      const actualHTML = await downloader.downloadRandomArticle();
+      const actualResponse: Response = await downloader.fetchRandomArticle();
+      const actualHTMLStr: string = await actualResponse.text();
+      const actualHTML: HTMLElement = parse(actualHTMLStr);
       expect(actualHTML.text.length).toBeGreaterThan(100);
     });
   });
