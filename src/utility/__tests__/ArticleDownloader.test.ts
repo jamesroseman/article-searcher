@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-
+import { HTMLElement, parse } from 'node-html-parser';
 import ArticleDownloader, { INVALID_URL_PROVIDED_ERROR } from "../ArticleDownloader";
 
 describe('ArticleDownloader', () => {
@@ -22,14 +22,15 @@ describe('ArticleDownloader', () => {
       const validUrl: string = 'https://en.wikipedia.org/wiki/Shepard_Fairey';
       const expectedHTMLPath = path.resolve(__dirname, './constants/ArticleDownloader_ShepardFaireyWikipediaPage.html');
       const expectedHTMLBuffer: Buffer = fs.readFileSync(expectedHTMLPath);
-      const expectedHTML: string = expectedHTMLBuffer.toString();
+      const expectedHTMLStr: string = expectedHTMLBuffer.toString();
+      const expectedHTML: HTMLElement = parse(expectedHTMLStr);
       const actualHTML = await downloader.downloadRandomArticle(validUrl);
-      expect(actualHTML).toEqual(expectedHTML);
+      expect(actualHTML.text).toEqual(expectedHTML.text);
     });
 
     it('should successfully download a random article', async () => {
       const actualHTML = await downloader.downloadRandomArticle();
-      expect(actualHTML.length).toBeGreaterThan(100);
+      expect(actualHTML.text.length).toBeGreaterThan(100);
     });
   });
 });
