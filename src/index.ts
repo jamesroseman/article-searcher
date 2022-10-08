@@ -1,1 +1,1 @@
-export * from './api/server/createHandler';
+export { createHandler } from './api/server/createHandler';
