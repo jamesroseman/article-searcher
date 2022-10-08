@@ -10,7 +10,7 @@ steps:
   - run
   - build
 
-##  DEFINE CLOUD FUNCTIONS BELOW ##
+##  CLOUD FUNCTIONS ARE DEFINED BELOW ##
 
 # Route scraping events to the correct Scraper
 - name: 'gcr.io/cloud-builders/gcloud'
