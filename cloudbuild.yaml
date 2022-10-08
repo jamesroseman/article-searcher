@@ -1,0 +1,25 @@
+steps:
+# Install the local dependencies
+- name: 'gcr.io/cloud-builders/npm'
+  args:
+  - ci
+  - --production
+# Compile the Typescript Code into Javascript
+- name: 'gcr.io/cloud-builders/npm'
+  args:
+  - run
+  - build
+
+##  DEFINE CLOUD FUNCTIONS BELOW ##
+
+# Route scraping events to the correct Scraper
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+  - functions
+  - deploy
+  - routeScraperEvent
+  - --source=build/
+  - --trigger-topic=scraper_queue
+  - --runtime=nodejs14
+  - --memory=1024MB
+  - --timeout=120

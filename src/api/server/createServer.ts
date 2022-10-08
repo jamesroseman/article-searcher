@@ -11,7 +11,7 @@ export type APIServer = {
 export default async function createServer(): Promise<APIServer> {
   const app = express();
   const schema = await createSchema();
-  const apolloServer = new ApolloServer({ schema });
+  const apolloServer = new ApolloServer({ schema, introspection: true });
   await apolloServer.start();
   await apolloServer.applyMiddleware({ app, path: '/' });
   return {

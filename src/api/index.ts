@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import * as path from 'path';
-import { EnvVarUtils } from '../utils/EnvVarUtils';
 
+import { EnvVarUtils } from '../utils/EnvVarUtils';
 import createServer from './server/createServer';
 
 dotenv.config({ path: path.join(__dirname, '../../../.env') });
