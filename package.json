@@ -7,6 +7,7 @@
     "start": "ts-node src/index.ts",
     "download": "ts-node src/scripts/download.ts",
     "search": "ts-node src/scripts/search.ts",
+    "process": "ts-node src/scripts/process.ts",
     "test": "jest"
   },
   "repository": {

@@ -5,7 +5,8 @@ function timer(ms: number) { return new Promise(res => setTimeout(res, ms)); }
 async function downloadArticle() {
   const articleDownloader: ArticleDownloader = new ArticleDownloader();
   await timer(3000);
-  await articleDownloader.downloadRandomArticle();
+  const response = await articleDownloader.downloadAndProcessRandomArticle();
+  console.log(`- URL: ${response.url}`);
 }
 
 async function downloadArticles() {
