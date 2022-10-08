@@ -11,7 +11,7 @@ export class ArticleSearchResolverArgs {
 }
 
 @ObjectType()
-class ArticleSearchResult {
+export class ArticleSearchResult {
   @Field(() => String)
   url: string;
 
@@ -20,7 +20,7 @@ class ArticleSearchResult {
 }
 
 @ObjectType()
-class ArticleSearchResolverResponse {
+export class ArticleSearchResolverResponse {
   @Field(() => [ArticleSearchResult])
   results: ArticleSearchResult[];
 }
