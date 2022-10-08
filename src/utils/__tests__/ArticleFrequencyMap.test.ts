@@ -16,11 +16,11 @@ describe('ArticleFrequencyMap', () => {
       const testArticle: HTMLElement = parse(testHTMLStr);
       const expectedFrequencyMap: HeadingBodyFrequencyMap = {
         headings: {
-          "the": 1, "title": 4, "three": 1, "times": 1, "another": 1,
+          "the": 1, "title": 3, "three": 1, "times": 1, 
         },
         body: {
           "this": 1, "is": 1, "the": 1, "paragraph": 3, "it": 1, "might": 1, "have": 1,
-          "title": 1, "too": 1,
+          "title": 2, "too": 1, "another": 1,
         }
       }
       const articleFreqMap: ArticleFrequencyMap = new ArticleFrequencyMap(testArticle);
@@ -42,13 +42,14 @@ describe('ArticleFrequencyMap', () => {
       const expectedFrequencyMap: HeadingBodyFrequencyMap = {
         headings: {
           "the": 1, "the title": 1, "the title title": 1,
-          "title": 4, "title title": 2, "title title title": 1,
+          "title": 3, "title title": 2, "title title title": 1,
           "title title three": 1, "title three": 1, "title three times": 1,
-          "three": 1, "three times": 1, "three times another": 1,
-          "times": 1, "times another": 1, "times another title": 1, 
-          "another": 1, "another title": 1, 
+          "three": 1, "three times": 1, 
+          "times": 1, 
         },
         body: {
+          "another": 1, "another title": 1, "another title this": 1, 
+          "title this": 1, "title this is": 1,
           "this": 1, "this is": 1, "this is the": 1,
           "is": 1, "is the": 1, "is the paragraph": 1, 
           "the": 1, "the paragraph": 1, "the paragraph paragraph": 1,
@@ -57,7 +58,7 @@ describe('ArticleFrequencyMap', () => {
           "it": 1, "it might": 1, "it might have": 1, 
           "might": 1, "might have": 1, "might have title": 1,
           "have": 1, "have title": 1, "have title too": 1, 
-          "title": 1, "title too": 1, 
+          "title": 2, "title too": 1, 
           "too": 1,
         }
       }

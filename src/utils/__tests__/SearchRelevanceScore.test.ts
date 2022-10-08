@@ -16,7 +16,7 @@ describe('SearchRelevanceScore', () => {
         ]
       ];
       const expectedRankings: ArticleRanking[] = [
-        { url: "URL-1", ranking: 400 },
+        { url: "URL-1", ranking: 40000 },
       ];
       const actualRankings: ArticleRanking[] = score.getScore(testWCs);
       expect(actualRankings).toEqual(expectedRankings);

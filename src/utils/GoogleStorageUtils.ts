@@ -1,8 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
-
-import { Datastore } from '@google-cloud/datastore';
-import { Bucket, Storage } from '@google-cloud/storage';
+import { Datastore, Query } from '@google-cloud/datastore';
+import { Bucket, Storage, File } from '@google-cloud/storage';
 
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
@@ -89,6 +88,17 @@ export async function doesFileExist(
 }
 
 /**
+ * Gets a list of all files in a bucket.
+ */
+export async function getListOfFilesInBucket(
+  storage: Storage,
+  bucket: string,
+): Promise<File[]> {
+  const [files] = await storage.bucket(bucket).getFiles();
+  return files;
+}
+
+/**
  * Stores an object in Datastore.
  */
 export async function storeObjects(
@@ -98,22 +108,59 @@ export async function storeObjects(
   objects: any[],
 ): Promise<boolean> {
   try {
-    const tasks = objects.map((object: any) => {
+    const objs = objects.map((object: any) => {
       const id: string = getIDFromObject(object);
       const key = datastore.key([kind, id]);
       return { key, data: object };
     });
     // Datastore upsert calls need to be in batches of 400.
-    const batchedTasks: any[][] = []
-    while (tasks.length > 0) {
-      const currentTasks = tasks.splice(0, 400);
-      batchedTasks.push(currentTasks);
+    const batchedObjs: any[][] = [];
+    while (objs.length > 0) {
+      const currentObjs = objs.splice(0, 400);
+      batchedObjs.push(currentObjs);
     }
-    await Promise.all(batchedTasks.map(async (tasks: any[]) => {
-      await datastore.upsert(tasks);
+    await Promise.all(batchedObjs.map(async (objs: any[]) => {
+      await datastore.upsert(objs);
     }));
     return true;
   } catch {
     return false;
   }
+}
+
+/**
+ * Deletes all objects of a Kind in Datastore.
+ */
+export async function deleteAllObjects(
+  datastore: Datastore,
+  kind: string,
+): Promise<boolean> {
+  try {
+    const query: Query = datastore.createQuery(kind);
+    const objects: ({ [datastore.KEY]: any })[] = await fetchObjects<({ [datastore.KEY]: any })>(datastore, query);
+    const keys = objects.map((obj) => obj[datastore.KEY]);
+    // Datastore delete calls need to be in batches of 400.
+    const batchedKeys: any[][] = [];
+    while (keys.length > 0) {
+      const currentKeys = keys.splice(0, 400);
+      batchedKeys.push(currentKeys);
+    }
+    await Promise.all(batchedKeys.map(async (keys: any[]) => {
+      await datastore.delete(keys);
+    }));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Retrieves objects from Datastore.
+ */
+export async function fetchObjects<T>(
+  datastore: Datastore,
+  query: Query,
+): Promise<T[]> {
+  const [objects] = await datastore.runQuery(query);
+  return objects as T[];
 }

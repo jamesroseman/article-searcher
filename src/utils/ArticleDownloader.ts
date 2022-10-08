@@ -7,6 +7,7 @@ import { save, storeObjects } from "./GoogleStorageUtils";
 import ArticleFrequencyMap, { HeadingBodyFrequencyMap } from "./ArticleFrequencyMap";
 import { ArticleWordCount, getStorageIDFromWordCount } from '../types/ArticleWordCount';
 import { DatastoreKinds } from '../types/Datastore';
+import { EnvVarUtils } from './EnvVarUtils';
 
 export interface IArticleDownloader {
   downloadRandomArticle: (url?: string) => Promise<Response>;
@@ -25,7 +26,7 @@ export default class ArticleDownloader implements IArticleDownloader {
   private articleFetcher: ArticleFetcher;
   private datastore: Datastore;
   private storage: Storage;
-  private bucketName: string = 'wikipedia_searcher_wikipedia_articles';
+  private bucketName: string = EnvVarUtils.getBucketName();
   private wordSearchWindow: number = 5;
   
   async downloadRandomArticle(url?: string): Promise<Response> {

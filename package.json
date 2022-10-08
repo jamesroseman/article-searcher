@@ -6,6 +6,7 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "download": "ts-node src/scripts/download.ts",
+    "search": "ts-node src/scripts/search.ts",
     "test": "jest"
   },
   "repository": {

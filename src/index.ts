@@ -1,8 +1,10 @@
-import ArticleDownloader from "./utils/ArticleDownloader";
+import { File, Storage } from '@google-cloud/storage'; 
+import ArticleDeleter from './utils/ArticleDeleter';
+import { EnvVarUtils } from './utils/EnvVarUtils';
+import { getListOfFilesInBucket } from './utils/GoogleStorageUtils';
 
 async function main() {
-  const ad: ArticleDownloader = new ArticleDownloader();
-  const response: Response = await ad.downloadRandomArticle();
+  
 }
 
 main();

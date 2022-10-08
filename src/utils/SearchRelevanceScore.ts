@@ -31,7 +31,7 @@ export default class SearchRelevanceScore implements ISearchRelevanceScore {
         wordCounts.forEach((wordCount: ArticleWordCount) => {
           rankings.push({
             url: wordCount.url,
-            ranking: this.computeScore(wordCount.isHeading, index+1, wordCount.freq),
+            ranking: this.computeScore(wordCount.word, wordCount.isHeading, index+1, wordCount.freq),
           })
         });
         return rankings;
@@ -50,23 +50,36 @@ export default class SearchRelevanceScore implements ISearchRelevanceScore {
       {}
     );
     // Transform the map back into a list.
-    const dedupedRankings: ArticleRanking[] = Object.keys(dedupedRankingsMap).map(
-      (key: string) => ({ url: key, ranking: dedupedRankingsMap[key] } as ArticleRanking),
-    );
-    // Sort the list by ranking.
-    const sortedRankings: ArticleRanking[] = dedupedRankings.sort(
-      (rankingA: ArticleRanking, rankingB: ArticleRanking) => rankingB.ranking - rankingA.ranking,
-    );
-    return sortedRankings;
+    // Filter out any rankings with low scores.
+    // Sort by ranking.
+    return Object
+      .keys(dedupedRankingsMap)
+      .filter((key: string) => dedupedRankingsMap[key] > 100)
+      .map(
+        (key: string) => ({ url: key, ranking: dedupedRankingsMap[key] } as ArticleRanking),
+      )
+      .sort(
+        (rankingA: ArticleRanking, rankingB: ArticleRanking) => rankingB.ranking - rankingA.ranking,
+      );
   }
 
   private computeScore(
+    word: string,
     isHeading: boolean,
     numberOfWordsInCommon: number,
     frequency: number,
   ): number {
-    const headingModifier: number = isHeading ? 10 : 1;
+    // If the search term includes common conjunctions, we should ignore these conjuctions as
+    // stand-alone search terms, or our results will likely be skewed.
+    const commonWords: string[] = ["the", "and", "but", "if"];
+    if (commonWords.includes(word)) {
+      return 0;
+    }
+    const headingModifier: number = isHeading ? 1000 : 1;
     const commonModifier: number = (numberOfWordsInCommon + 1) * 10;
+    if (word === "south dakota" || word === "american football") {
+      console.log(word, isHeading, numberOfWordsInCommon, frequency, (headingModifier * commonModifier * frequency));
+    }
     return headingModifier * commonModifier * frequency;
   }
 }
