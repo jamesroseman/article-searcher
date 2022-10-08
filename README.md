@@ -206,3 +206,12 @@ The project expects the JSON in `credentials/credentials.json`, however this is 
 The project expects a project in your GCP account called `wikipediasearcher`. This should be changed to the name of the desired GCP project, and is also configurable in the `.env` environment variable configuration file included in the project.
 
 The project expects a bucket in Google Storage called `wikipedia_searcher_wikipedia_articles`. This should be changed to the name of the desired bucket to store Wikipedia articles into, and is also configurable in the `.env` environment variable configuration file included in the project.
+
+#### Run tests
+
+Ensure that the packages have been set up correctly by running unit tests on the interfaces with the command `npm test`.
+
+![Image of working tests](./README_img/TestsDemo.png)
+
+Tests can be found in `src/utils/__tests__`.
+
