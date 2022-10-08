@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "rm -rf build/ && tsc && cp package.json build/",
     "start:api": "ts-node src/api/index.ts",
     "download": "ts-node src/scripts/download.ts",
     "search": "ts-node src/scripts/search.ts",
