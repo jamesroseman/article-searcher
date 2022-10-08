@@ -17,9 +17,9 @@ steps:
   args:
   - functions
   - deploy
-  - routeScraperEvent
+  - createHandler
   - --source=build/
-  - --trigger-topic=scraper_queue
+  - --trigger-topic=graphql_requests
   - --runtime=nodejs14
   - --memory=1024MB
   - --timeout=120
