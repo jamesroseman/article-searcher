@@ -19,7 +19,7 @@ steps:
   - deploy
   - createHandler
   - --source=build/
-  - --trigger-topic=graphql_requests
+  - --trigger-http
   - --runtime=nodejs14
   - --memory=1024MB
   - --timeout=120
