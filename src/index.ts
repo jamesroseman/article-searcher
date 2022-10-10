@@ -1,2 +1,4 @@
-// Exports here are consumed as Google Cloud Functions.
-export { createHandler } from './api/server/createHandler';
+import { createHandler } from './api/server/createHandler';
+
+// Any exports can be used as Google functions.
+export const handler = createHandler();
